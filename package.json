@@ -1,0 +1,21 @@
+
+
+{
+  "name": "athens",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "dev": "concurrently -n server,clien -c blue,green \"nodemon server.js\" \"npm run client\""
+  },
+
+
+  "dependencies": {
+    "axios": "^0.27.2",
+    "concurrently": "^7.3.0",
+    "express": "^4.18.1",
+    "mongoose": "^6.5.2",
+    "morgan": "^1.10.0"
+  }
+}
