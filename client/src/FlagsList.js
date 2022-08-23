@@ -6,8 +6,11 @@ import Country from './country';
 
 export default function Flags ({countries}){
     return (
-        countries.map( country => {
-            return <Country Key = {country} country ={country} />
+        countries.map( country => { 
+            if(!country.eliminated){
+                
+                return <Country key = {country.id} country ={country} />}
+                return undefined
         })
     )
 }
