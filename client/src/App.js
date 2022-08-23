@@ -9,29 +9,33 @@ function App (){
     function handleVote (event){
         const name = countryNameRef.current.value
         const indexOfcountry = countries.findIndex(country => country.name === name  )
+
         if (indexOfcountry > -1){
             castVote(cVote => {
                 cVote[indexOfcountry].votes++
-                return cVote
+                return [...cVote]
             })
-            console.log(countries[indexOfcountry].votes)
 
         }else{
             console.log("User doesn't know how to spell")
         }
     }
 
+
     function handleElimination (){
         let maxVotes = 0
         countries.forEach(country => {if(country.votes > maxVotes && country.eliminated === false){maxVotes = country.votes}})
-        const indexOfcountry = countries.findIndex(country => country.votes === maxVotes)
-        castVote(cVote => {
-            console.log(indexOfcountry)
-            cVote[indexOfcountry].eliminated = true
-            return cVote
-        })
+        const indexOfcountry = countries.findIndex(country => country.votes === maxVotes && country.eliminated === false)
+        if(indexOfcountry === -1){
+            return undefined
+        }else{
+            castVote(cVote => {
+                cVote[indexOfcountry].eliminated = true
+                return [...cVote]})
+        }
     }
     
+
     
 
 
