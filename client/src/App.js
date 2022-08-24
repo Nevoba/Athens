@@ -3,46 +3,22 @@ import Flags from './FlagsList';
 import axios from 'axios';
 
 function App (){
-/*     let [countries, castVote] = useState([{id: 1, name: 'Israel', votes: 0, eliminated: false},{id: 2, name: 'Japan', votes: 0, eliminated: false},{id: 3, name: 'Switzerland', votes: 0, eliminated: false}]);
-    const countryNameRef = useRef();
-
-
-    
-    function handleVote (event){
-        const name = countryNameRef.current.value
-        const indexOfcountry = countries.findIndex(country => country.name === name  )
-
-        if (indexOfcountry > -1){
-            castVote(cVote => {
-                cVote[indexOfcountry].votes++
-                return [...cVote]
-            })
-
-        }else{
-            console.log("User doesn't know how to spell")
-        }
-    } */
-
-    
-
-    
-    
 
     let [countries, setCountries] = useState([]);
     const countryNameRef = useRef();
 
     
     function initCountries (){
-    axios.get('/api/getCountries')
-        .then((response) => {
-            const data = response.data;
+        axios.get('/api/getCountries')
+            .then((response) => {
+                const data = response.data;
 
-            setCountries(() => {
-                return data
+                setCountries(() => {
+                    return data
+                })
+
             })
-
-        })
-        .catch(() => alert('Error retriving countries data'))
+            .catch(() => alert('Error retriving countries data'))
     }
 
     //Initializing the state from the DB
@@ -52,16 +28,15 @@ function App (){
     
     
     function handleVote (event){
-        console.log(countries)
         const name = countryNameRef.current.value
 
-        const indexOfcountry = countries.findIndex(country => country.name === name  )
+        const indexOfcountry = countries.findIndex(country => country.countryName === name  )
 
 
         if (indexOfcountry > -1){
             const payload = {
-                countryName: countries[indexOfcountry].name,
-                countryId: countries[indexOfcountry].id
+                countryName: countries[indexOfcountry].countryName,
+                countryId: countries[indexOfcountry].Id
             }
             axios({
                 url: '/api/castVote',
@@ -77,6 +52,30 @@ function App (){
 
 
     function handleElimination (){
+        const electionsResults = [[]]
+        countries.map(country => {
+            if(country.eliminated === false){
+                electionsResults.push([country.countryName,0])
+            }
+            return undefined
+        })
+
+
+        axios.get('/api/getVotes')
+            .then((response) => {
+                const data = response.data;
+
+                setCountries(() => {
+                    return data
+                })
+
+            })
+            .catch(() => alert('Error retriving countries data'))
+
+
+    }
+
+   /*  function handleElimination (){
         let maxVotes = 0
         countries.forEach(country => {if(country.votes > maxVotes && country.eliminated === false){maxVotes = country.votes}})
         const indexOfcountry = countries.findIndex(country => country.votes === maxVotes && country.eliminated === false)
@@ -87,16 +86,8 @@ function App (){
                 cVote[indexOfcountry].eliminated = true
                 return [...cVote]})
         }
-    }
+    } */
     
-
-    function getElectionResults(){
-        axios.get('/api/getVotes')
-        .then((response) => {
-        })
-        .catch(() => alert('Error retriving election results'))
-    }
-
     
 
 
