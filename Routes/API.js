@@ -45,7 +45,6 @@ router.get('/getVotes', (req,res) => {
 
     Ballot.find({ })
     .then((data) => {
-        console.log('BAE');
         res.json(data);
     })
     .catch((error)=> {
@@ -57,11 +56,27 @@ router.get('/getCountries', (req,res) => {
 
     Country.find({ })
     .then((data) => {       
-        console.log('BAE');
         res.json(data);
     })
     .catch((error)=> {
         console.log('Data:', error);
+    });
+});
+
+router.get('/getElectionsResults', (req,res) => {
+
+    Ballot.aggregate(
+        [
+            {$match: {}},
+            {$group: {_id: "$countryId", votes: {$count: {}} } }
+        ]
+    )
+    .then((data) => {       
+        console.log('BAE');
+        res.json(data);
+    })
+    .catch((error)=> {
+        console.log('Data:', error);    
     });
 });
 
