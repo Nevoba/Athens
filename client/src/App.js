@@ -1,11 +1,13 @@
 import React, {useState, useRef} from 'react';
 import Flags from './FlagsList';
+import axios from 'axios';
 
 function App (){
-    let [countries, castVote] = useState([{id: 1, name: 'Israel', votes: 0, eliminated: false},{id: 2, name: 'Japan', votes: 0, eliminated: false},{id: 3, name: 'Switzerland', votes: 0, eliminated: false}]);
+/*     let [countries, castVote] = useState([{id: 1, name: 'Israel', votes: 0, eliminated: false},{id: 2, name: 'Japan', votes: 0, eliminated: false},{id: 3, name: 'Switzerland', votes: 0, eliminated: false}]);
     const countryNameRef = useRef();
 
 
+    
     function handleVote (event){
         const name = countryNameRef.current.value
         const indexOfcountry = countries.findIndex(country => country.name === name  )
@@ -16,6 +18,44 @@ function App (){
                 return [...cVote]
             })
 
+        }else{
+            console.log("User doesn't know how to spell")
+        }
+    } */
+
+
+/*     axios({
+        url: '/api/castVote',
+        method: 'POST',
+        data: payload
+     })
+        .then(resp => console.log(resp))
+        .catch(resp => console.log(resp)) */
+    
+
+    let [countries, castVote] = useState([{id: 1, name: 'Israel', votes: 0, eliminated: false},{id: 2, name: 'Japan', votes: 0, eliminated: false},{id: 3, name: 'Switzerland', votes: 0, eliminated: false}]);
+    const countryNameRef = useRef();
+
+
+    
+    function handleVote (event){
+        const name = countryNameRef.current.value
+
+        const indexOfcountry = countries.findIndex(country => country.name === name  )
+
+
+        if (indexOfcountry > -1){
+            const payload = {
+                countryName: countries[indexOfcountry].name,
+                countryId: countries[indexOfcountry].id
+            }
+            axios({
+                url: '/api/castVote',
+                method: 'POST',
+                data: payload
+             })
+                .then(resp => console.log(resp))
+                .catch(resp => console.log(resp))
         }else{
             console.log("User doesn't know how to spell")
         }
@@ -35,6 +75,14 @@ function App (){
         }
     }
     
+
+    function getElectionResults(){
+        axios.get({'/api/getVotes'})
+        .then((response) => {
+            const data = response.data;
+        })
+        .catch(() => alert('Error retriving election results'))
+    }
 
     
 

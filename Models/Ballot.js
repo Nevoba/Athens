@@ -5,9 +5,9 @@ const mongoose = require('mongoose')
 
 //Schema
 const Schema = mongoose.Schema;
-const BallotBoxSchema = new Schema({
-    title: String,
-    body: String,
+const BallotSchema = new Schema({
+    countryName: String,
+    countryId: String,
     date: {
         type: String,
         default: Date.now()
@@ -15,6 +15,6 @@ const BallotBoxSchema = new Schema({
 })
 
 //Model
-const BallotBox = mongoose.model('BlogPost', BallotBoxSchema)
+const Ballot = mongoose.model('Ballot', BallotSchema)
 
-module.exports = BallotBox;
+module.exports = Ballot;
