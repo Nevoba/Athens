@@ -12,7 +12,7 @@ function App (){
         axios.get('/api/getCountries')
             .then((response) => {
                 const data = response.data;
-
+                console.log(response.data)
                 setCountries(() => {
                     return data
                 })
@@ -52,25 +52,28 @@ function App (){
 
 
     function handleElimination (){
-        const electionsResults = [[]]
-        countries.map(country => {
-            if(country.eliminated === false){
-                electionsResults.push([country.countryName,0])
-            }
-            return undefined
-        })
 
-
-        axios.get('/api/getVotes')
+        axios.get('/api/getElectionsResults')
             .then((response) => {
                 const data = response.data;
 
-                setCountries(() => {
-                    return data
-                })
+                data.sort((a,b) => b.votes - a.votes)
+
+                const payload = {
+                    countryId: data[0]._id
+                }
+                axios({
+                    url: '/api/eliminateCountry',
+                    method: 'POST',
+                    data: payload
+                    })
+                    .then(() => initCountries())
+                    .catch((resp) => console.log(resp))                  
 
             })
-            .catch(() => alert('Error retriving countries data'))
+            .catch(() => alert('Error retriving countries data'))             
+
+ 
 
 
     }

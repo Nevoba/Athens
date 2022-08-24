@@ -9,7 +9,6 @@ const Country = require('../Models/Country')
 //Routes
 
 router.get('/name', (req,res) => {
-    console.log('Snitch');
     const data = {
         username: 'Nevo',
         age: 22
@@ -18,14 +17,11 @@ router.get('/name', (req,res) => {
 });
 
 
-
+//Creates a vote in ballots group
 router.post('/castVote', (req,res) => {
     const data =  req.body
 
     const newBallot = new Ballot(data)
-
-    console.log(data)
-    console.log(newBallot)
 
     newBallot.save((error) => {
         if (error){
@@ -38,6 +34,25 @@ router.post('/castVote', (req,res) => {
     })
 
     
+});
+
+
+
+//Eliminates a country by setting its eliminated attribute to true in the countries group
+router.post('/eliminateCountry', (req,res) => {
+    console.log(req.body.countryId)
+    Country.updateMany(
+    {
+        "Id": req.body.countryId 
+    },
+    {
+        "$set": {
+            "eliminated": false
+        }
+    }
+
+   ).exec()
+    res.json()
 });
 
 
@@ -72,13 +87,14 @@ router.get('/getElectionsResults', (req,res) => {
         ]
     )
     .then((data) => {       
-        console.log('BAE');
         res.json(data);
     })
     .catch((error)=> {
         console.log('Data:', error);    
     });
 });
+
+
 
 
 
