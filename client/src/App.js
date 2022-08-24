@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import Flags from './FlagsList';
 import axios from 'axios';
 
@@ -23,22 +23,36 @@ function App (){
         }
     } */
 
-
-/*     axios({
-        url: '/api/castVote',
-        method: 'POST',
-        data: payload
-     })
-        .then(resp => console.log(resp))
-        .catch(resp => console.log(resp)) */
     
 
-    let [countries, castVote] = useState([{id: 1, name: 'Israel', votes: 0, eliminated: false},{id: 2, name: 'Japan', votes: 0, eliminated: false},{id: 3, name: 'Switzerland', votes: 0, eliminated: false}]);
+    
+    
+
+    let [countries, setCountries] = useState([]);
     const countryNameRef = useRef();
 
+    
+    function initCountries (){
+    axios.get('/api/getCountries')
+        .then((response) => {
+            const data = response.data;
+
+            setCountries(() => {
+                return data
+            })
+
+        })
+        .catch(() => alert('Error retriving countries data'))
+    }
+
+    //Initializing the state from the DB
+    useEffect(() => initCountries(), [] )
 
     
+    
+    
     function handleVote (event){
+        console.log(countries)
         const name = countryNameRef.current.value
 
         const indexOfcountry = countries.findIndex(country => country.name === name  )
@@ -69,7 +83,7 @@ function App (){
         if(indexOfcountry === -1){
             return undefined
         }else{
-            castVote(cVote => {
+            setCountries(cVote => {
                 cVote[indexOfcountry].eliminated = true
                 return [...cVote]})
         }
@@ -77,9 +91,8 @@ function App (){
     
 
     function getElectionResults(){
-        axios.get({'/api/getVotes'})
+        axios.get('/api/getVotes')
         .then((response) => {
-            const data = response.data;
         })
         .catch(() => alert('Error retriving election results'))
     }
@@ -92,7 +105,6 @@ function App (){
             <input key="DiePie" ref={countryNameRef} type= "text"/>
             <button key="Bitch" onClick={handleVote}>Submit vote</button>
             <button key="Lasagna" onClick={handleElimination}>Eliminate largest</button>
-            <div key="Pew">You have voted for Israel {countries[0].votes}</div>
             <Flags countries={countries}  />
         </>
     )
