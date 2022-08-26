@@ -5,30 +5,53 @@ import axios from 'axios';
 function App (){
 
     const [countries, setCountries] = useState([]);
-    const [guess, setGuess] = useState('');
+    const [suggestions, setSuggestions] = useState([])
+    const [vote, setVote] = useState('');
 
-    
+    //Retrives the countries's data from the db and set it in app's state
     function initCountries (){
         axios.get('/api/getCountries')
             .then((response) => {
                 const data = response.data;
                 console.log(response.data)
-                setCountries(() => {
-                    return data
-                })
+                setCountries(() => {return data})
 
             })
             .catch(() => alert('Error retriving countries data'))
     }
+    
 
     //Initializing the state from the DB
     useEffect(() => initCountries(), [] )
+    
 
-    
-    
+    //Handles the change in the guess bar
+
+    const autocomplete = (text) => {
+        setVote(text);
+
+        let listOfSuggestions =  []
+        if(text.length > 0)
+        {
+            listOfSuggestions = countries.filter(country =>
+                {
+
+                    return !country.eliminated && country.countryName.toLowerCase().includes(text.toLowerCase())
+                    console.log(!country.eliminated && country.countryName.toLowerCase().includes(text.toLowerCase()))
+                }).map(country => {return country.countryName});
+        }
+        console.log("suggestions:" ,listOfSuggestions)
+
+
+        setSuggestions(listOfSuggestions);
+
+    }
+
+
+
     //Adds a new vote to the db
     function handleVote (event){
-        const name = guess
+        const name = vote
 
         const indexOfcountry = countries.findIndex(country => country.countryName === name  )
 
@@ -83,26 +106,12 @@ function App (){
 
 
     }
-
-   /*  function handleElimination (){
-        let maxVotes = 0
-        countries.forEach(country => {if(country.votes > maxVotes && country.eliminated === false){maxVotes = country.votes}})
-        const indexOfcountry = countries.findIndex(country => country.votes === maxVotes && country.eliminated === false)
-        if(indexOfcountry === -1){
-            return undefined
-        }else{
-            setCountries(cVote => {
-                cVote[indexOfcountry].eliminated = true
-                return [...cVote]})
-        }
-    } */
     
-    
-
-
     return (
         <>
-            <input key="DiePie" value={guess} onChange={e => setGuess(e.target.value)} type= "text"/>
+            <input key="DiePie" value={vote} onChange={text => autocomplete(text.target.value)} type= "text"/>
+            {suggestions && suggestions.map((suggestion,i) => 
+            <div key={i}>{suggestion}</div>)}
             <button key="Bitch" onClick={handleVote}>Submit vote</button>
             <button key="Lasagna" onClick={handleElimination}>Eliminate largest</button>
             <Flags countries={countries}  />
