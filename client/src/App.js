@@ -26,7 +26,7 @@ function App (){
 
     
     
-    
+    //Adds a new vote to the db
     function handleVote (event){
         const name = countryNameRef.current.value
 
@@ -36,7 +36,8 @@ function App (){
         if (indexOfcountry > -1){
             const payload = {
                 countryName: countries[indexOfcountry].countryName,
-                countryId: countries[indexOfcountry].Id
+                countryId: countries[indexOfcountry].Id,
+                counted: false
             }
             axios({
                 url: '/api/castVote',
@@ -68,7 +69,12 @@ function App (){
                     data: payload
                     })
                     .then(() => initCountries())
-                    .catch((resp) => console.log(resp))                  
+                    .catch((resp) => console.log(resp))    
+                    
+                    
+                axios.post('/api/newElections')
+                .then(resp => console.log(resp))
+                .catch((resp) => console.log(resp))     
 
             })
             .catch(() => alert('Error retriving countries data'))             

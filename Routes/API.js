@@ -37,17 +37,39 @@ router.post('/castVote', (req,res) => {
 });
 
 
+//Resets the votes db
+router.post('/newElections', (req,res) => {
+    try{
+        Ballot.updateMany({
+            "counted": false
+        },
+        {
+            "$set":{
+                "counted":true
+            }
+        }).exec()
+
+    }catch(e){
+        console.log("errorz")
+    }finally{
+        res.json({
+            electionStatus: 'Clean slate'
+        });
+    }
+    
+});
+
+
 
 //Eliminates a country by setting its eliminated attribute to true in the countries group
 router.post('/eliminateCountry', (req,res) => {
-    console.log(req.body.countryId)
     Country.updateMany(
     {
         "Id": req.body.countryId 
     },
     {
         "$set": {
-            "eliminated": false
+            "eliminated": true
         }
     }
 
@@ -82,7 +104,7 @@ router.get('/getElectionsResults', (req,res) => {
 
     Ballot.aggregate(
         [
-            {$match: {}},
+            {$match: {counted: false}},
             {$group: {_id: "$countryId", votes: {$count: {}} } }
         ]
     )
