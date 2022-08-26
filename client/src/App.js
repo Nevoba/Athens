@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import Flags from './FlagsList';
+import Flags from './Components/flag_list';
+import SuggestionList from './Components/suggestion_list';
 import axios from 'axios';
 
 function App (){
@@ -110,8 +111,7 @@ function App (){
     return (
         <>
             <input key="DiePie" value={vote} onChange={text => autocomplete(text.target.value)} type= "text"/>
-            {suggestions && suggestions.map((suggestion,i) => 
-            <div key={i}>{suggestion}</div>)}
+            <SuggestionList suggestions={suggestions}/>
             <button key="Bitch" onClick={handleVote}>Submit vote</button>
             <button key="Lasagna" onClick={handleElimination}>Eliminate largest</button>
             <Flags countries={countries}  />
