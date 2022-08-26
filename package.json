@@ -1,5 +1,3 @@
-
-
 {
   "name": "athens",
   "version": "1.0.0",
@@ -10,19 +8,20 @@
     "dev": "concurrently -n server,client -c blue,green \"nodemon server.js\" \"npm run client\""
   },
   "dependencies": {
-   "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
     "axios": "^0.27.2",
     "concurrently": "^7.3.0",
+    "country-list": "^2.2.0",
     "express": "^4.18.1",
     "mongoose": "^6.5.2",
     "morgan": "^1.10.0",
-    "nodemon":"^2.0.19"
+    "nodemon": "^2.0.19",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-jvectormap": "^0.0.16",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
   }
-
 }

@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import Flags from './Components/flag_list';
 import SuggestionList from './Components/suggestion_list';
+import Map from './Components/map';
 import axios from 'axios';
+
+
 
 function App (){
 
@@ -114,7 +117,8 @@ function App (){
             <SuggestionList suggestions={suggestions}/>
             <button key="Bitch" onClick={handleVote}>Submit vote</button>
             <button key="Lasagna" onClick={handleElimination}>Eliminate largest</button>
-            <Flags countries={countries}  />
+            <Map/>
+            {/* <Flags countries={countries}  /> */}
         </>
     )
 }
