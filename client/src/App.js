@@ -1,11 +1,11 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import Flags from './FlagsList';
 import axios from 'axios';
 
 function App (){
 
-    let [countries, setCountries] = useState([]);
-    const countryNameRef = useRef();
+    const [countries, setCountries] = useState([]);
+    const [guess, setGuess] = useState('');
 
     
     function initCountries (){
@@ -28,7 +28,7 @@ function App (){
     
     //Adds a new vote to the db
     function handleVote (event){
-        const name = countryNameRef.current.value
+        const name = guess
 
         const indexOfcountry = countries.findIndex(country => country.countryName === name  )
 
@@ -102,7 +102,7 @@ function App (){
 
     return (
         <>
-            <input key="DiePie" ref={countryNameRef} type= "text"/>
+            <input key="DiePie" value={guess} onChange={e => setGuess(e.target.value)} type= "text"/>
             <button key="Bitch" onClick={handleVote}>Submit vote</button>
             <button key="Lasagna" onClick={handleElimination}>Eliminate largest</button>
             <Flags countries={countries}  />
